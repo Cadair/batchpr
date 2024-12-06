@@ -238,12 +238,12 @@ class Updater(metaclass=abc.ABCMeta):
         except Exception:  # noqa
             pass
 
+        # Update to the latest upstream's default branch (usually "main")
+        self.run_command(f'git remote add upstream {self.repo.html_url}')
+        self.run_command(f'git fetch upstream {self.repo.default_branch}')
         try:
             self.run_command(f'git checkout -b {self.branch_name} origin/{self.branch_name}')
         except Exception:  # noqa
-            # Update to the latest upstream's default branch (usually "main")
-            self.run_command(f'git remote add upstream {self.repo.html_url}')
-            self.run_command(f'git fetch upstream {self.repo.default_branch}')
             self.run_command(f'git checkout -b {self.branch_name} upstream/{self.repo.default_branch}')
 
         # Initialize submodules (this is a no-op if there is no submodule)
